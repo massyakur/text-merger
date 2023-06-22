@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Combination</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Text Combination</h1>
+    <form method="post" action="/combine">
+<!--        <div id="input-container">-->
+<!--            <div class="form-group" th:each="i : ${#numbers.sequence(0, 1)}">-->
+<!--                <label th:text="${'Text ' + (i + 1)}"></label>-->
+<!--                <input type="text" name="text" class="form-control" required>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div id="inputTexts" class="form-group">
+            <label>Enter the texts:</label>
+            <div class="form-group" th:each="i : ${#numbers.sequence(0, 1)}">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><b th:text="${(i + 1)}"></b></span>
+                </div>
+                <input type="text" class="form-control" name="text" required>
+            </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary mb-3" onclick="addNewTextInput();">Add</button>
+<!--        <button type="button" id="add-input" class="btn btn-primary">Add</button>-->
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="advancedCheckbox" onchange="toggleAdvancedOptions();">
+            <label class="form-check-label" for="advancedCheckbox">Advanced</label>
+        </div>
+        <div class="form-group collapse" id="advancedOptions">
+            <input type="hidden" name="minOverlapLength" id="minOverlapLengthHidden" value="3">
+            <!-- Add any additional advanced options here -->
+            <label for="minOverlapLength">Minimum Overlap Length: <span id="minOverlapLengthValue">3</span></label>
+            <input type="range" class="form-control-range" id="minOverlapLength" name="minOverlapLength" min="1" max="10" value="3" onchange="updateMinOverlapLengthValue(this.value);">
+        </div>
+        <button type="submit" class="btn btn-primary">Combine</button>
+    </form>
+    <hr>
+    <!--<form method="post" action="/save" th:if="${combinedText != null}">
+        <input type="hidden" name="elapsedTime" th:value="${elapsedTime}">
+        <div th:each="text : ${inputTexts}">
+            <input type="hidden" name="inputTexts" th:value="${text}">
+        </div>
+        <h2>Result:</h2>
+        <p th:text="${combinedText}"></p>
+        <h3>Elapsed Time:</h3>
+        <p th:text="${elapsedTime}"></p>
+        &lt;!&ndash;<button type="submit" class="btn btn-info">Save</button>&ndash;&gt;
+    </form>-->
+
+    <!-- Save Form -->
+<!--    <form action="/save" method="post" class="mt-3">
+        <input type="hidden" th:each="text, iterStat : ${inputTexts}" th:value="${text}" name="inputTexts">
+        <input type="hidden" th:value="${combinedText}" name="combinedText"> &lt;!&ndash; Add this line &ndash;&gt;
+        <input type="hidden" th:value="${elapsedTime}" name="elapsedTime">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>-->
+
+    <form action="#" th:action="@{/save}" method="post" class="mt-3">
+        <input type="hidden" th:each="text, iterStat : ${inputTexts}" th:value="${text}" name="inputTexts">
+        <div class="form-group">
+            <label>Combined Text:</label>
+            <input type="text" class="form-control" th:value="${combinedText}" name="combinedText" readonly>
+        </div>
+        <div class="form-group">
+            <label>Elapsed Time:</label>
+            <input type="text" class="form-control" th:value="${elapsedTime}" name="elapsedTime" readonly>
+        </div>
+        <p th:text="${message}"></p>
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="/history" class="btn btn-secondary">History</a>
+    </form>
+
+    <hr>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let inputCount = 2;
+
+    function addNewTextInput() {
+            inputCount++;
+            const newTextInput = document.createElement('div');
+            newTextInput.classList.add('input-group', 'mb-3');
+            newTextInput.innerHTML = `
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><b>${inputCount}</b></span>
+                </div>
+                <input type="text" class="form-control" name="text" required>`;
+            document.getElementById('inputTexts').appendChild(newTextInput);
+    }
+
+    function updateMinOverlapLengthValue(value) {
+            document.getElementById('minOverlapLengthValue').innerText = value;
+            document.getElementById('minOverlapLengthHidden').value = value;
+    }
+
+    function toggleAdvancedOptions() {
+            const advancedCheckbox = document.getElementById('advancedCheckbox');
+            const advancedOptions = document.getElementById('advancedOptions');
+            if (advancedCheckbox.checked) {
+                advancedOptions.classList.add('show');
+            } else {
+                advancedOptions.classList.remove('show');
+            }
+    }
+</script>
+</body>
+</html>

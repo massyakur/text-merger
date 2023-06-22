@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Combination History</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Text Combination History</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Input Texts</th>
+            <th>Combined Text</th>
+            <th>Elapsed Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record : ${records}">
+            <td th:text="${record.id}"></td>
+            <td>
+                <ol>
+                    <li th:each="text : ${record.inputTexts}" th:text="${text}"></li>
+                </ol>
+            </td>
+            <td th:text="${record.combinedText}"></td>
+            <td th:text="${record.elapsedTime}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <hr>
+    <a href="/" class="btn btn-primary">Back to Text Combination</a>
+</div>
+</body>
+</html>
